@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["orgchart"] });
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/OrganizationChart/AjaxMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Entity');
+                    data.addColumn('string', 'ParentEntity');
+                    data.addColumn('string', 'ToolTip');
+
+                    for (var i = 0; i < r.length; i++) {
+                        var EmployeeId = r[i][0].toString();
+                        var EmployeeNumber = r[i][1];
+                        var FirstName = r[i][2];
+                        var LastName = r[i][3];
+                        var BirthDate = r[i][4] != null ? r[i][4].toString() : '';
+                        var Salary = r[i][5].toString();
+                        var Position = r[i][6];
+                        var DepartmentId = r[i][7];
+                        var ManagerId = r[i][8];
+                        var HireDate = r[i][9].toString();
+                        var Email = r[i][10];
+
+                        // Build the display name with HTML for the tooltip
+                        var employeeName = FirstName + ' ' + LastName;
+                        var reportingManager = ManagerId != null ? ManagerId.toString() : ''; // Safeguard against null ManagerId
+
+                        // Add the row to the data table
+                        data.addRows([[{
+                            v: EmployeeId,
+                            f: employeeName + '<div>(<span>' + Position + '</span> | Emp No: ' + EmployeeNumber + ')</div>' // Tooltip with position and ID
+                        }, reportingManager, Position]]);
+                    }
+
+                    var chart = new google.visualization.OrgChart($("#chart")[0]);
+                    chart.draw(data, { allowHtml: true });
+                },
+                failure: function (r) {
+                    alert(r);
+                },
+                error: function (r) {
+                    alert(r);
+                }
+            });
+        }
+
+    </script>
+    <div id="chart">
+    </div>
+</body>
+</html>
+
+
+
+ 

@@ -15,22 +15,7 @@ namespace EPI_USE.Controllers
         {
             _context = context;
         }
-        //public async Task<IActionResult> Index()
-        //{
-        //    var departments = await _context.Departments
-        //        .Include(d => d.Manager)
-        //        .Select(d => new DepartmentViewModel
-        //        {
-        //            DepartmentId = d.DepartmentId,
-        //            DepartmentName = d.DepartmentName,
-        //            ManagerId = d.ManagerId,
-        //            ManagerName = d.Manager != null ? d.Manager.FirstName + " " + d.Manager.LastName : "N/A",
-        //            EmployeeCount = d.EmployeeCount ?? 0
-        //        })
-        //        .ToListAsync();
-
-        //    return View(departments);
-        //}
+        
         public async Task<IActionResult> Index(string searchQuery, string sortOrder)
         {
             // Start with the base query
@@ -161,39 +146,7 @@ namespace EPI_USE.Controllers
 
                 TempData["SuccessMessage"] = "Department updated successfully!";
                 return RedirectToAction(nameof(Index));
-                //if (id != model.DepartmentId)
-                //{
-                //    return BadRequest();
-                //}
-
-                //if (ModelState.IsValid)
-                //{
-                //    var department = await _context.Departments.FindAsync(id);
-                //    if (department == null)
-                //    {
-                //        return NotFound();
-                //    }
-
-                //    // Update department fields
-                //    department.DepartmentName = model.DepartmentName;
-
-                //    // Update ManagerId based on ManagerEmail
-                //    var manager = await _context.Employees
-                //        .FirstOrDefaultAsync(e => e.Email == model.ManagerEmail);
-
-                //    department.ManagerId = manager?.EmployeeId; // Set ManagerId if manager is found
-
-                //    try
-                //    {
-                //        await _context.SaveChangesAsync();
-                //        TempData["SuccessMessage"] = "Department updated successfully!";
-                //        return RedirectToAction(nameof(Index));
-                //    }
-                //    catch (DbUpdateException)
-                //    {
-                //        ModelState.AddModelError("", "Unable to save changes. Try again.");
-                //    }
-                //}
+            
 
             }
                 return View(model);
@@ -218,5 +171,6 @@ namespace EPI_USE.Controllers
 
             return View(viewModel);
         }
+
     }
 }

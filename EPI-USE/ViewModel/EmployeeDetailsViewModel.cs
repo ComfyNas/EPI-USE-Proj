@@ -14,7 +14,7 @@ namespace EPI_USE.ViewModel
         public string DepartmentName { get; set; } = null!;
         public DateOnly HireDate { get; set; }
         public string? ManagerName { get; set; }
-        public int? DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
         public string Email { get; set; }
         public IEnumerable<SelectListItem> Departments { get; set; } = new List<SelectListItem>();
         public int? ManagerId { get; set; }

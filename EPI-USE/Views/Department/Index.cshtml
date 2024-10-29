@@ -26,9 +26,12 @@
                 <td>@department.EmployeeCount</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@department.DepartmentId" class="btn btn-primary">View Details</a>
+                    <a asp-action="Edit" asp-route-id="@department.DepartmentId" class="btn btn-warning">Edit</a>
                 </td>
             </tr>
+            
         }
+         <a asp-action="Create" class="btn btn-success">Add New Department</a>
     </tbody>
 </table>
 

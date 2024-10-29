@@ -1,0 +1,23 @@
+﻿@model EPI_USE.ViewModel.EmployeeDeleteViewModel
+
+<h2>Delete Employee</h2>
+
+<form asp-action="Delete">
+    <label>Email:</label>
+    <input type="email" asp-for="Email" required readonly="@(Model.Email != null)" />
+    <button type="submit">Search</button>
+</form>
+
+@if (Model?.Employee != null)
+{
+    <div>
+        <h3>Employee Details</h3>
+        <p>Name: @Model.Employee.FirstName @Model.Employee.LastName</p>
+        <p>Position: @Model.Employee.Position</p>
+
+        <form asp-action="ConfirmDelete" method="post">
+            <input type="hidden" asp-for="Email" />
+            <button type="submit">Confirm Delete</button>
+        </form>
+    </div>
+}
