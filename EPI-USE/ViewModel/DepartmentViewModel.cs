@@ -13,6 +13,5 @@ namespace EPI_USE.ViewModel
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
     public virtual Employee? Manager { get; set; }
     public string? ManagerName { get; set; }
-        public List<DepartmentViewModel> Children { get; set; } = new List<DepartmentViewModel>();
     }
 }
