@@ -1,0 +1,44 @@
+﻿@model EPI_USE.ViewModel.EmployeeDetailsViewModel
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<div class="container mt-4">
+    <h1>Employee Details</h1>
+    <div class="card">
+        <div class="card-header">
+            <h4>@Model.FirstName @Model.LastName</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Employee Number</dt>
+                <dd class="col-sm-9">@Model.EmployeeNumber</dd>
+
+                <dt class="col-sm-3">Position</dt>
+                <dd class="col-sm-9">@Model.Position</dd>
+
+                <dt class="col-sm-3">Salary</dt>
+                <dd class="col-sm-9">@Model.Salary.ToString("R")</dd> <!-- Format as currency -->
+
+                <dt class="col-sm-3">Date of Birth</dt>
+                <dd class="col-sm-9">@Model.BirthDate.ToShortDateString()</dd> <!-- Format the date -->
+
+                <dt class="col-sm-3">Hire Date</dt>
+                <dd class="col-sm-9">@Model.HireDate.ToShortDateString()</dd> <!-- Format the date -->
+
+                <dt class="col-sm-3">Department Name</dt>
+                <dd class="col-sm-9">@Model.DepartmentName</dd>
+
+                <dt class="col-sm-3">Manager Name</dt>
+                <dd class="col-sm-9">@Model.ManagerName</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+            </dl>
+        </div>
+        <div class="card-footer text-right">
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>           
+        </div>
+    </div>
+</div>

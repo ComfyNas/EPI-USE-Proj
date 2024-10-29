@@ -1,0 +1,49 @@
+﻿@model EPI_USE.ViewModel.EmployeeViewModel
+
+<h2>Add New Employee</h2>
+
+<form asp-controller="Employee" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Position"></label>
+        <input asp-for="Position" class="form-control" />
+        <span asp-validation-for="Position" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DepartmentId">Department</label>
+        <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control"></select>
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#DepartmentId').change(function () {
+                const departmentId = $(this).val();
+                // Make an AJAX call to get the manager info for the selected department
+            });
+        });
+    </script>
+}

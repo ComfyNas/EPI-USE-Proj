@@ -1,0 +1,52 @@
+﻿@* @model IEnumerable<EPI_USE.ViewModels.EmployeeViewModel> *@
+   @using EPI_USE.ViewModel
+   @model IEnumerable<EPI_USE.ViewModel.EmployeeViewModel>
+
+@{
+    ViewData["Title"] = "Employees List";
+}
+
+<h1>Employees</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+        <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+        </div>
+}
+<form asp-controller="Employee" asp-action="Index" method="get">
+    <input type="text" name="searchQuery" placeholder="Search employees"/>
+    <button type="submit">Search</button>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Position</th>
+            <th>Manager</th>
+        
+            <th>Actions</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+                <tr>
+                    <td>@employee.FirstName</td>
+                    <td>@employee.LastName</td>
+                    <td>@employee.Position</td>
+                    <td>@employee.ManagerName</td>
+                   
+                    <td>
+                        <a asp-action="Details" asp-route-id="@employee.EmployeeId" class="btn btn-primary">View Details</a>                        
+                    </td>
+                </tr>
+        }
+  
+               <a asp-action="Create" class="btn btn-success">Add New Employee</a>
+    </tbody>
+</table>

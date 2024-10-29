@@ -4,6 +4,7 @@ using EPI_USE.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPI_USE.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241028185015_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,82 +24,6 @@ namespace EPI_USE.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("EPI_USE.Data.Department", b =>
-                {
-                    b.Property<int>("DepartmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
-
-                    b.Property<string>("DepartmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EmployeeCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DepartmentId");
-
-                    b.HasIndex("ManagerId");
-
-                    b.ToTable("Departments");
-                });
-
-            modelBuilder.Entity("EPI_USE.Data.Employee", b =>
-                {
-                    b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
-
-                    b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly>("HireDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("EmployeeId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("ManagerId");
-
-                    b.ToTable("Employees");
-                });
 
             modelBuilder.Entity("EPI_USE.Data.Option", b =>
                 {
@@ -361,33 +288,6 @@ namespace EPI_USE.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EPI_USE.Data.Department", b =>
-                {
-                    b.HasOne("EPI_USE.Data.Employee", "Manager")
-                        .WithMany("Departments")
-                        .HasForeignKey("ManagerId");
-
-                    b.Navigation("Manager");
-                });
-
-            modelBuilder.Entity("EPI_USE.Data.Employee", b =>
-                {
-                    b.HasOne("EPI_USE.Data.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EPI_USE.Data.Employee", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Manager");
-                });
-
             modelBuilder.Entity("EPI_USE.Data.Option", b =>
                 {
                     b.HasOne("EPI_USE.Data.OptionGroup", "OptionGroup")
@@ -446,16 +346,6 @@ namespace EPI_USE.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EPI_USE.Data.Department", b =>
-                {
-                    b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("EPI_USE.Data.Employee", b =>
-                {
-                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("EPI_USE.Data.OptionGroup", b =>

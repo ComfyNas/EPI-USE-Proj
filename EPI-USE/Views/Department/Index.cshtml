@@ -1,0 +1,78 @@
+﻿@using EPI_USE.ViewModel
+@model IEnumerable<EPI_USE.ViewModel.DepartmentViewModel>
+
+<h1>Departments</h1>
+
+<form asp-controller="Department" asp-action="Index" method="get">
+    <input type="text" name="searchQuery" placeholder="Search departments"/>
+    <button type="submit">Search</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Department Name</a></th>
+            <th>Manager</th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["CountSortParm"]">Employee Count</a></th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var department in Model)
+        {
+            <tr>
+                <td>@department.DepartmentName</td>
+                <td>@department.ManagerName</td>
+                <td>@department.EmployeeCount</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@department.DepartmentId" class="btn btn-primary">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@* @model IEnumerable<EPI_USE.ViewModel.DepartmentViewModel>
+
+@{
+    ViewData["Title"] = "Departments List";
+}
+
+<h1>Departments</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Department Name</th>
+            <th>Manager</th>
+            <th>Employee Count</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var department in Model)
+        {
+            <tr>
+                <td>@department.DepartmentName</td>
+                <td>@department.ManagerName</td>
+                <td>@department.EmployeeCount</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@department.DepartmentId" class="btn btn-primary">View Details</a>
+                    <a asp-action="Edit" asp-route-id="@department.DepartmentId" class="btn btn-warning">Edit</a>
+                </td>
+            </tr>
+        }
+        <a asp-action="Create" class="btn btn-success">Add New Department</a>
+    </tbody>
+</table>
+
+
+ *@
