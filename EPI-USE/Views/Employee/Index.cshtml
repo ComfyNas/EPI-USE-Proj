@@ -42,7 +42,9 @@
                     <td>@employee.ManagerName</td>
                    
                     <td>
-                        <a asp-action="Details" asp-route-id="@employee.EmployeeId" class="btn btn-primary">View Details</a>                        
+                        <a asp-action="Details" asp-route-id="@employee.EmployeeId" class="btn btn-primary">View Details</a>
+                        <a asp-action="Edit" asp-route-id="@employee.EmployeeId" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-email="@employee.Email" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
         }

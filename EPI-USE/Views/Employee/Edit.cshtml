@@ -1,9 +1,11 @@
 ﻿@model EPI_USE.ViewModel.EmployeeViewModel
 
-<h2>Add New Employee</h2>
+<h2>Edit Employee</h2>
 
-<form asp-controller="Employee" asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" asp-for="EmployeeId" />
+
     <div class="form-group">
         <label asp-for="FirstName"></label>
         <input asp-for="FirstName" class="form-control" />
@@ -15,11 +17,6 @@
         <input asp-for="LastName" class="form-control" />
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
 
     <div class="form-group">
         <label asp-for="Position"></label>
@@ -28,33 +25,21 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="DepartmentId">Department</label>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DepartmentId"></label>
         <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control"></select>
         <span asp-validation-for="DepartmentId" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label asp-for="Salary"></label>
         <input asp-for="Salary" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="Salary" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="BirthDate"></label>
-        <input asp-for="BirthDate" class="form-control" type="date" />
-        <span asp-validation-for="BirthDate" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save</button>
+    </div>  
+   <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
-
-@section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#DepartmentId').change(function () {
-                const departmentId = $(this).val();
-                // Make an AJAX call to get the manager info for the selected department
-            });
-        });
-    </script>
-}

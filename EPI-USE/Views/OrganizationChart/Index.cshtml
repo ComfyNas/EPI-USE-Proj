@@ -1,0 +1,58 @@
+﻿<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    google.charts.load("current", { packages: ["orgchart"] });
+    google.charts.setOnLoadCallback(function () {
+        $('#btnLoadChart').click(function () {
+            drawChart();
+        });
+    });
+
+    function drawChart() {
+        $.ajax({
+            type: "GET",
+            url: "/OrganizationChart/AjaxMethod",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Entity');
+                data.addColumn('string', 'ParentEntity');
+                data.addColumn('string', 'ToolTip');
+
+                for (var i = 0; i < r.length; i++) {
+                    var EmployeeId = r[i][0].toString();
+                    var EmployeeNumber = r[i][1];
+                    var FirstName = r[i][2];
+                    var LastName = r[i][3];
+                    var BirthDate = r[i][4] ? r[i][4].toString() : '';
+                    var Salary = r[i][5].toString();
+                    var Position = r[i][6];
+                    var DepartmentId = r[i][7];
+                    var ManagerId = r[i][8] ? r[i][8].toString() : '';
+                    var HireDate = r[i][9].toString();
+                    var Email = r[i][10];
+
+                    var employeeName = FirstName + ' ' + LastName;
+                    var reportingManager = ManagerId || ''; 
+
+                    data.addRows([[{
+                        v: EmployeeId,
+                        f: employeeName + '<div>(<span>' + Position + '</span> | ID: ' + EmployeeId + ')</div>'
+                    }, reportingManager, Position]]);
+                }
+
+                var chart = new google.visualization.OrgChart(document.getElementById('chart'));
+                chart.draw(data, { allowHtml: true });
+            },
+            error: function (r) {
+                alert("Failed to load chart data.");
+            }
+        });
+    }
+</script>
+
+<div id="chart" style="width: 100%; height: 600px;"></div>
+
+ <button id="btnLoadChart">Load Chart</button>
