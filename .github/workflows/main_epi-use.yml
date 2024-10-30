@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ./publish_output
+          path: ./output
 
   deploy:
     runs-on: windows-latest
@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'epi-use'
           slot-name: 'Production'
-          package: ./publish_output
+          package: ./output
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_91811923ACDF4002B1E356F543F9645B}}
