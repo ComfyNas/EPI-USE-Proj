@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace EPI_USE.Controllers
 {
@@ -17,7 +16,23 @@ namespace EPI_USE.Controllers
             _context = context;
         }
 
-       
+        //GET: Employees/Create
+        //public async Task<IActionResult> Index()
+        //{
+        //    var employees = await _context.Employees
+        //        .Include(e => e.Manager)
+        //        .Select(e => new EmployeeViewModel
+        //        {
+        //            EmployeeId = e.EmployeeId,
+        //            FirstName = e.FirstName,
+        //            LastName = e.LastName,
+        //            Position = e.Position,
+        //            ManagerName = e.Manager != null ? e.Manager.FirstName + " " + e.Manager.LastName : "N/A"
+        //        })
+        //        .ToListAsync();
+
+        //    return View(employees);
+        //}
         public async Task<IActionResult> Index(string searchQuery, string sortOrder)
         {
             // Start with the base query
@@ -174,242 +189,6 @@ namespace EPI_USE.Controllers
             return View(employee); // Return the employee view model
         }
 
-        // GET: Employee/Edit/5
-        public async Task<IActionResult> Edit(int id)
-        {
-            var employee = await _context.Employees
-                .Include(e => e.Manager)
-                .Include(e => e.Department)
-                .FirstOrDefaultAsync(e => e.EmployeeId == id);
-
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            var model = new EmployeeViewModel
-            {
-                EmployeeId = employee.EmployeeId,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Position = employee.Position,
-                DepartmentId = employee.DepartmentId,
-                ManagerId = employee.ManagerId,
-                Email = employee.Email,
-                HireDate = employee.HireDate,
-                ManagerName = employee.Manager != null ? employee.Manager.FirstName + " " + employee.Manager.LastName : "N/A",
-                Departments = await _context.Departments.Select(d => new SelectListItem
-                {
-                    Value = d.DepartmentId.ToString(),
-                    Text = d.DepartmentName
-                }).ToListAsync()
-            };
-
-            return View(model);
-        }
-
-
-        // POST: Employee/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EmployeeViewModel model)
-        {
-            if (id != model.EmployeeId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == id);
-
-                if (employee == null)
-                {
-                    return NotFound();
-                }
-
-                // Update employee fields
-                employee.FirstName = model.FirstName;
-                employee.LastName = model.LastName;
-                employee.Position = model.Position;
-                employee.Email = model.Email;
-                employee.HireDate = model.HireDate;
-
-                // Fetch the selected department and update ManagerId
-                var department = await _context.Departments
-                    .Include(d => d.Manager)
-                    .FirstOrDefaultAsync(d => d.DepartmentId == model.DepartmentId);
-
-                if (department == null)
-                {
-                    ModelState.AddModelError("", "Department not found.");
-                    model.Departments = await _context.Departments.Select(d => new SelectListItem
-                    {
-                        Value = d.DepartmentId.ToString(),
-                        Text = d.DepartmentName
-                    }).ToListAsync();
-                    return View(model);
-                }
-
-                employee.DepartmentId = department.DepartmentId;
-                employee.ManagerId = department.ManagerId;
-
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Employee updated successfully!";
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmployeeExists(employee.EmployeeId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            model.Departments = await _context.Departments.Select(d => new SelectListItem
-            {
-                Value = d.DepartmentId.ToString(),
-                Text = d.DepartmentName
-            }).ToListAsync();
-
-            return View(model);
-        }
-
-        private bool EmployeeExists(int id)
-        {
-            return _context.Employees.Any(e => e.EmployeeId == id);
-        }
-
-        public IActionResult Delete(string email)
-        {
-
-            var model = new EmployeeDeleteViewModel
-            {
-                Email = email // Pre-fill the email if provided
-            };
-
-            return View(model);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Delete(EmployeeDeleteViewModel model)
-        {
-            if (string.IsNullOrEmpty(model.Email))
-            {
-                ModelState.AddModelError("", "Email cannot be null or empty.");
-                return View(model);
-            }
-
-            var employee = await _context.Employees
-                .Where(e => e.Email == model.Email)
-                .Select(e => new EmployeeViewModel
-                {
-                    EmployeeId = e.EmployeeId,
-                    FirstName = e.FirstName,
-                    LastName = e.LastName,
-                    Position = e.Position
-                })
-                .FirstOrDefaultAsync();
-
-            if (employee == null)
-            {
-                ModelState.AddModelError("", "Employee not found.");
-                return View(model);
-            }
-
-            // Set the found employee details in the view model for confirmation
-            model.Employee = employee;
-
-            return View(model); // Redisplay view with employee details for confirmation
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmDelete(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                TempData["ErrorMessage"] = "Email cannot be null or empty.";
-                return RedirectToAction(nameof(Delete));
-            }
-
-            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Email == email);
-
-            if (employee == null)
-            {
-                TempData["ErrorMessage"] = "Employee not found.";
-                return RedirectToAction(nameof(Delete));
-            }
-
-            _context.Employees.Remove(employee);
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Employee deleted successfully!";
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        // GET: Employee/Delete?email=someone@example.com
-        //public async Task<IActionResult> Delete(string email)
-        //{
-        //    if (string.IsNullOrEmpty(email))
-        //    {
-        //        return BadRequest("Email cannot be null or empty.");
-        //    }
-
-        //    var employee = await _context.Employees
-        //        .FirstOrDefaultAsync(e => e.Email == email);
-
-        //    if (employee == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var model = new EmployeeDetailsViewModel
-        //    {
-        //        EmployeeId = employee.EmployeeId,
-        //        EmployeeNumber = employee.EmployeeNumber,
-        //        FirstName = employee.FirstName,
-        //        LastName = employee.LastName,
-        //        Position = employee.Position,
-        //        Email = employee.Email,
-        //        DepartmentName = employee.Department?.DepartmentName,
-        //        ManagerName = employee.Manager?.FirstName + " " + employee.Manager?.LastName
-        //    };
-
-        //    return View(model);
-        //}
-
-        //// POST: Employee/DeleteConfirmed
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(string email)
-        //{
-        //    if (string.IsNullOrEmpty(email))
-        //    {
-        //        return BadRequest("Email cannot be null or empty.");
-        //    }
-
-        //    var employee = await _context.Employees
-        //        .FirstOrDefaultAsync(e => e.Email == email);
-
-        //    if (employee == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Employees.Remove(employee);
-        //    await _context.SaveChangesAsync();
-
-        //    TempData["SuccessMessage"] = "Employee deleted successfully!";
-        //    return RedirectToAction(nameof(Index));
-        //}
 
 
         // GET: Employees
