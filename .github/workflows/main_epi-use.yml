@@ -8,7 +8,8 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+env:
+  AZURE_WEBAPP_PACKAGE_PATH: EPI-USE-Proj\published
 jobs:
   build:
     runs-on: windows-latest
@@ -24,14 +25,14 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Publish with dotnet
+        run: dotnet publish -c Release -o "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: net-app
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
   deploy:
     runs-on: windows-latest
@@ -44,7 +45,9 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: net-app
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -52,5 +55,5 @@ jobs:
         with:
           app-name: 'epi-use'
           slot-name: 'Production'
-          package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_91811923ACDF4002B1E356F543F9645B }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_91811923ACDF4002B1E356F543F9645B}}
