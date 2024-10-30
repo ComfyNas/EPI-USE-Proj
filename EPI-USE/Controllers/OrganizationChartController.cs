@@ -15,14 +15,14 @@ namespace EPI_USE.Controllers
             _context = context;
         }
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index() // This will render the OrganizationChart view
         {
             return View();
-        }     
+        }
         public JsonResult AjaxMethod()
         {
             List<object> chartData = new List<object>();
-            string query = "SELECT * FROM Employees";     
+            string query = "SELECT * FROM Employees";
             string constr = "Server=LAPTOP-RFTR69D9\\SQLEXPRESS;Database=EPI-USE_empDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
             using (SqlConnection con = new SqlConnection(constr))
             {
@@ -44,7 +44,6 @@ namespace EPI_USE.Controllers
                     con.Close();
                 }
             }
-
             return Json(chartData);
         }
 
