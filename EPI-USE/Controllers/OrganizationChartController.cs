@@ -9,12 +9,18 @@ namespace EPI_USE.Controllers
     public class OrganizationChartController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public OrganizationChartController(ApplicationDbContext context)
+        private readonly IConfiguration _configuration;
+        public OrganizationChartController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
+
+     
+
+       
         [HttpGet]
+
         public IActionResult Index() // This will render the OrganizationChart view
         {
             return View();
@@ -23,7 +29,7 @@ namespace EPI_USE.Controllers
         {
             List<object> chartData = new List<object>();
             string query = "SELECT * FROM Employees";
-            string constr = "Server=tcp:musmanserver.database.windows.net,1433;Initial Catalog=epi-use;Persist Security Info=False;User ID=musman;Password=Jesus1996;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            string? constr = _configuration.GetConnectionString("DefaultConnection");
             using (SqlConnection con = new SqlConnection(constr))
             {
                 using (SqlCommand cmd = new SqlCommand(query))
