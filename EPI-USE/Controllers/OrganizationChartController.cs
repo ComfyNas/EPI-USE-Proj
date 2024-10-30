@@ -23,7 +23,7 @@ namespace EPI_USE.Controllers
         {
             List<object> chartData = new List<object>();
             string query = "SELECT * FROM Employees";
-            string constr = "Server=musmanserver.database.windows.net,1433;Database=epi-use;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+            string constr = "Server=tcp:musmanserver.database.windows.net,1433;Initial Catalog=epi-use;Persist Security Info=False;User ID=musman;Password=Jesus1996;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             using (SqlConnection con = new SqlConnection(constr))
             {
                 using (SqlCommand cmd = new SqlCommand(query))

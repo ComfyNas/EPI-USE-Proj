@@ -42,8 +42,9 @@ namespace EPI_USE
             app.UseAuthorization();
 
             app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+      name: "default",
+      pattern: "{controller=Employee}/{action=Index}/{id?}"); // Default to Employee/Index
+
             app.MapRazorPages();
 
             app.Run();
