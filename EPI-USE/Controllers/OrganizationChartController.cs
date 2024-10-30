@@ -23,7 +23,7 @@ namespace EPI_USE.Controllers
         {
             List<object> chartData = new List<object>();
             string query = "SELECT * FROM Employees";
-            string constr = "Server=LAPTOP-RFTR69D9\\SQLEXPRESS;Database=EPI-USE_empDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+            string constr = "Server=musmanserver.database.windows.net,1433;Database=epi-use;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
             using (SqlConnection con = new SqlConnection(constr))
             {
                 using (SqlCommand cmd = new SqlCommand(query))
